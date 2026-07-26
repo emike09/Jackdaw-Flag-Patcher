@@ -25,6 +25,7 @@ this patcher was first applied.
 - RGBA/transparency strongly recommended
 - Keep all visible artwork at least 8–16 transparent pixels away from every edge.
   Artwork touching the image boundaries may be clipped in game.
+- Artwork is inverted. This means you need to supply an upside-down image. 
 - Preserve the original extracted flag's alpha silhouette for natural torn edges
 
 The tool modifies `DataPC_boot.forge`. It appends new texture data and changes only
