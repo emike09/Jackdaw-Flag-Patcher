@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 - 2026-07-25
+
+- Added independent replacement support for the regular and end-game flags.
+- Added clearly separated, non-spoiler controls for choosing which flag to change.
+- Added an independent backup and restore path for each flag resource.
+- Preserved compatibility with regular-flag backups created by version 1.0.
+- Added dual-resource fixture coverage proving that applying or restoring either
+  flag leaves the other resource index untouched.
+
 ## 1.0.0 - 2026-07-25
 
 - Promoted the tested patcher to its first stable release.

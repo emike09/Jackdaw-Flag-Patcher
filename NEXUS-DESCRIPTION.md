@@ -1,9 +1,9 @@
 # Jackdaw Flag Patcher
 
-Replace only the Jackdaw's pirate flag in Assassin's Creed IV: Black Flag with
-your own design. Choose a 1024 × 512 PNG and the patcher handles conversion and
-installation while retaining the original flag model, torn silhouette, and cloth
-physics.
+Independently replace the Jackdaw's regular flag, end-game flag, or both with your
+own designs. Choose a 1024 × 512 PNG for the flag you want to change and the
+patcher handles conversion and installation while retaining the original flag
+model, torn silhouette, and cloth physics.
 
 ## Requirements
 
@@ -14,14 +14,16 @@ physics.
 ## Installation
 
 1. Download and extract the complete ZIP.
-2. If another mod currently changes the Jackdaw flag, use that mod to restore the
-   original first.
+2. If another mod currently changes the selected Jackdaw flag, use that mod to
+   restore the original first.
 3. Close the game.
 4. Run `JackdawFlagPatcher.exe`.
-5. Confirm the detected Black Flag folder—or browse manually—choose your
-   replacement PNG, then click **Apply flag**.
+5. Confirm the detected Black Flag folder—or browse manually.
+6. Under **Regular flag** or **End-game flag**, choose your replacement PNG and
+   click **Apply replacement**.
 
-Click **Restore original** in the same tool to uninstall the replacement.
+Each flag has its own **Restore original** button. Applying or restoring one flag
+does not change the other.
 
 Your design should use transparency and the alpha silhouette from an extracted
 original flag if you want to preserve its naturally torn edges.
@@ -32,20 +34,22 @@ may be clipped in game.
 
 ## What it changes
 
-This tool supports one asset only: the Jackdaw pirate flag. It appends a BC7
-replacement texture to `DataPC_boot.forge` and relinks file ID `0x218240C6D66`.
-It does not replace flag geometry or physics.
+This tool supports two separately selectable assets: the Jackdaw's regular flag
+and end-game flag. It appends a BC7 replacement texture to `DataPC_boot.forge`
+and relinks only the selected flag resource. It does not replace flag geometry
+or physics.
 
 The original archive data is not overwritten. The tool verifies the replacement
-before relinking the resource and keeps a small restoration record in your
+before relinking the resource and keeps independent restoration records in your
 Documents folder.
 
 ## Compatibility
 
 The patcher recognizes the Steam Resynced executable and the legacy PC executable.
 It searches Steam and Ubisoft registry entries and Steam library metadata, with
-manual selection available. Restore other Jackdaw flag mods before first use.
-Launcher file verification can recover an altered or unsupported archive.
+manual selection available. Restore other mods affecting the selected flag before
+its first use. Launcher file verification can recover an altered or unsupported
+archive.
 
 The executable is unsigned, so Windows may display a SmartScreen prompt.
 

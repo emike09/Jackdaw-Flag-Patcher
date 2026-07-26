@@ -14,10 +14,10 @@ using Microsoft.Win32;
 
 [assembly: AssemblyTitle("Jackdaw Flag Patcher")]
 [assembly: AssemblyProduct("Jackdaw Flag Patcher")]
-[assembly: AssemblyDescription("Standalone Jackdaw pirate flag texture patcher")]
+[assembly: AssemblyDescription("Standalone Jackdaw regular and end-game flag texture patcher")]
 [assembly: AssemblyCopyright("Copyright © 2026 Fishes")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
 
 namespace JackdawFlagPatcher
 {
@@ -35,28 +35,38 @@ namespace JackdawFlagPatcher
     internal sealed class MainForm : Form
     {
         private readonly TextBox gamePath = new TextBox();
-        private readonly TextBox pngPath = new TextBox();
+        private readonly TextBox regularPngPath = new TextBox();
+        private readonly TextBox endGamePngPath = new TextBox();
         private readonly TextBox log = new TextBox();
         private readonly Button chooseGame = new Button();
-        private readonly Button choosePng = new Button();
-        private readonly Button apply = new Button();
-        private readonly Button revert = new Button();
+        private readonly Button chooseRegularPng = new Button();
+        private readonly Button chooseEndGamePng = new Button();
+        private readonly Button applyRegular = new Button();
+        private readonly Button restoreRegular = new Button();
+        private readonly Button applyEndGame = new Button();
+        private readonly Button restoreEndGame = new Button();
         private readonly Panel header = new Panel();
         private readonly Panel accentBar = new Panel();
+        private readonly Panel regularCard = new Panel();
+        private readonly Panel endGameCard = new Panel();
         private readonly Label title = new Label();
         private readonly Label subtitle = new Label();
         private readonly Label gameLabel = new Label();
-        private readonly Label pngLabel = new Label();
-        private readonly Label imageHint = new Label();
+        private readonly Label regularTitle = new Label();
+        private readonly Label regularDescription = new Label();
+        private readonly Label regularHint = new Label();
+        private readonly Label endGameTitle = new Label();
+        private readonly Label endGameDescription = new Label();
+        private readonly Label endGameHint = new Label();
         private readonly Label activityLabel = new Label();
         private bool darkTheme;
 
         public MainForm()
         {
-            Text = "Jackdaw Flag Patcher  ·  v1.0";
+            Text = "Jackdaw Flag Patcher  ·  v1.1";
             Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-            ClientSize = new Size(760, 550);
-            MinimumSize = new Size(700, 540);
+            ClientSize = new Size(880, 680);
+            MinimumSize = new Size(780, 650);
             StartPosition = FormStartPosition.CenterScreen;
             Font = new Font("Segoe UI", 9F);
             AutoScaleMode = AutoScaleMode.Dpi;
@@ -77,7 +87,7 @@ namespace JackdawFlagPatcher
             title.Font = new Font("Segoe UI Semibold", 17F);
             title.AutoSize = true;
             title.Location = new Point(96, 20);
-            subtitle.Text = "A focused, reversible texture patcher for the Jackdaw's pirate flag";
+            subtitle.Text = "Replace the Jackdaw's regular and end-game flag textures independently";
             subtitle.Font = new Font("Segoe UI", 9.5F);
             subtitle.AutoSize = true;
             subtitle.Location = new Point(99, 58);
@@ -96,40 +106,23 @@ namespace JackdawFlagPatcher
             chooseGame.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             chooseGame.Click += ChooseGame_Click;
 
-            pngLabel.Text = "REPLACEMENT PNG";
-            pngLabel.Font = new Font("Segoe UI Semibold", 8.5F);
-            pngLabel.AutoSize = true;
-            pngLabel.Location = new Point(28, 205);
-            pngPath.Location = new Point(28, 229);
-            pngPath.Size = new Size(596, 26);
-            pngPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            choosePng.Text = "Choose…";
-            choosePng.Location = new Point(636, 226);
-            choosePng.Size = new Size(96, 32);
-            choosePng.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            choosePng.Click += ChoosePng_Click;
-
-            imageHint.Text = "1024 × 512 RGBA  •  Keep artwork 8–16 transparent pixels away from every image edge";
-            imageHint.AutoSize = true;
-            imageHint.Location = new Point(30, 265);
-
-            apply.Text = "Apply replacement";
-            apply.Font = new Font("Segoe UI Semibold", 9.5F);
-            apply.Location = new Point(28, 307);
-            apply.Size = new Size(156, 40);
-            apply.Click += async delegate { await RunActionAsync(false); };
-            revert.Text = "Restore original";
-            revert.Font = new Font("Segoe UI Semibold", 9.5F);
-            revert.Location = new Point(195, 307);
-            revert.Size = new Size(145, 40);
-            revert.Click += async delegate { await RunActionAsync(true); };
+            ConfigureFlagCard(
+                regularCard, regularTitle, regularDescription, regularPngPath,
+                chooseRegularPng, regularHint, applyRegular, restoreRegular,
+                "Regular flag", "The Jackdaw's regular flag texture.",
+                "regular");
+            ConfigureFlagCard(
+                endGameCard, endGameTitle, endGameDescription, endGamePngPath,
+                chooseEndGamePng, endGameHint, applyEndGame, restoreEndGame,
+                "End-game flag", "The Jackdaw's separate end-game flag texture.",
+                "end-game");
 
             activityLabel.Text = "ACTIVITY";
             activityLabel.Font = new Font("Segoe UI Semibold", 8.5F);
             activityLabel.AutoSize = true;
-            activityLabel.Location = new Point(28, 377);
-            log.Location = new Point(28, 401);
-            log.Size = new Size(704, 121);
+            activityLabel.Location = new Point(28, 487);
+            log.Location = new Point(28, 511);
+            log.Size = new Size(824, 141);
             log.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             log.Multiline = true;
             log.ReadOnly = true;
@@ -138,9 +131,11 @@ namespace JackdawFlagPatcher
 
             Controls.AddRange(new Control[]
             {
-                header, gameLabel, gamePath, chooseGame, pngLabel, pngPath, choosePng,
-                imageHint, apply, revert, activityLabel, log
+                header, gameLabel, gamePath, chooseGame, regularCard, endGameCard,
+                activityLabel, log
             });
+            Layout += delegate { LayoutFlagCards(); };
+            LayoutFlagCards();
 
             darkTheme = IsSystemDarkTheme();
             ApplyTheme();
@@ -162,6 +157,72 @@ namespace JackdawFlagPatcher
             };
         }
 
+        private void ConfigureFlagCard(
+            Panel card, Label cardTitle, Label description, TextBox path,
+            Button choose, Label hint, Button applyButton, Button restoreButton,
+            string heading, string descriptionText, string slot)
+        {
+            card.Location = new Point(28, 204);
+            card.Height = 250;
+
+            cardTitle.Text = heading;
+            cardTitle.Font = new Font("Segoe UI Semibold", 14F);
+            cardTitle.AutoSize = true;
+            cardTitle.Location = new Point(20, 17);
+
+            description.Text = descriptionText;
+            description.AutoSize = true;
+            description.Location = new Point(22, 53);
+
+            path.Location = new Point(22, 87);
+            path.Height = 26;
+            path.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+
+            choose.Text = "Choose…";
+            choose.Size = new Size(92, 32);
+            choose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            choose.Click += delegate { ChoosePng(path, heading); };
+
+            hint.Text = "1024 × 512 RGBA" + Environment.NewLine +
+                        "Keep artwork 8–16 px from edges";
+            hint.AutoSize = true;
+            hint.Location = new Point(23, 124);
+
+            applyButton.Text = "Apply replacement";
+            applyButton.Font = new Font("Segoe UI Semibold", 9.5F);
+            applyButton.Location = new Point(22, 169);
+            applyButton.Size = new Size(154, 40);
+            applyButton.Click += async delegate { await RunActionAsync(slot, path, false); };
+
+            restoreButton.Text = "Restore original";
+            restoreButton.Font = new Font("Segoe UI Semibold", 9.5F);
+            restoreButton.Location = new Point(186, 169);
+            restoreButton.Size = new Size(140, 40);
+            restoreButton.Click += async delegate { await RunActionAsync(slot, path, true); };
+
+            card.Controls.AddRange(new Control[]
+            {
+                cardTitle, description, path, choose, hint, applyButton, restoreButton
+            });
+        }
+
+        private void LayoutFlagCards()
+        {
+            const int margin = 28;
+            const int gap = 16;
+            var cardWidth = Math.Max(340, (ClientSize.Width - margin * 2 - gap) / 2);
+            regularCard.SetBounds(margin, 204, cardWidth, 250);
+            endGameCard.SetBounds(margin + cardWidth + gap, 204, cardWidth, 250);
+            LayoutCardInput(regularCard, regularPngPath, chooseRegularPng);
+            LayoutCardInput(endGameCard, endGamePngPath, chooseEndGamePng);
+        }
+
+        private static void LayoutCardInput(Panel card, TextBox path, Button choose)
+        {
+            choose.Location = new Point(card.ClientSize.Width - 114, 84);
+            path.Width = Math.Max(170, card.ClientSize.Width - 148);
+        }
+
         private void ChooseGame_Click(object sender, EventArgs e)
         {
             using (var dialog = new FolderBrowserDialog())
@@ -173,18 +234,18 @@ namespace JackdawFlagPatcher
             }
         }
 
-        private void ChoosePng_Click(object sender, EventArgs e)
+        private void ChoosePng(TextBox target, string flagName)
         {
             using (var dialog = new OpenFileDialog())
             {
-                dialog.Title = "Choose a 1024 × 512 replacement flag";
+                dialog.Title = "Choose a 1024 × 512 replacement for the " + flagName.ToLowerInvariant();
                 dialog.Filter = "PNG images (*.png)|*.png";
                 if (dialog.ShowDialog(this) == DialogResult.OK)
-                    pngPath.Text = dialog.FileName;
+                    target.Text = dialog.FileName;
             }
         }
 
-        private async Task RunActionAsync(bool restore)
+        private async Task RunActionAsync(string slot, TextBox selectedPng, bool restore)
         {
             SetBusy(true);
             try
@@ -192,11 +253,11 @@ namespace JackdawFlagPatcher
                 string result;
                 if (restore)
                 {
-                    result = await Task.Run(() => Patcher.Restore(gamePath.Text));
+                    result = await Task.Run(() => Patcher.Restore(gamePath.Text, slot));
                 }
                 else
                 {
-                    result = await Task.Run(() => Patcher.Apply(gamePath.Text, pngPath.Text));
+                    result = await Task.Run(() => Patcher.Apply(gamePath.Text, selectedPng.Text, slot));
                 }
                 WriteLog(result);
                 MessageBox.Show(this, result, Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -214,7 +275,12 @@ namespace JackdawFlagPatcher
 
         private void SetBusy(bool busy)
         {
-            chooseGame.Enabled = choosePng.Enabled = apply.Enabled = revert.Enabled = !busy;
+            foreach (var button in new[]
+            {
+                chooseGame, chooseRegularPng, chooseEndGamePng, applyRegular,
+                restoreRegular, applyEndGame, restoreEndGame
+            })
+                button.Enabled = !busy;
             UseWaitCursor = busy;
         }
 
@@ -276,19 +342,25 @@ namespace JackdawFlagPatcher
             accentBar.BackColor = accent;
             title.ForeColor = foreground;
             subtitle.ForeColor = muted;
-            gameLabel.ForeColor = pngLabel.ForeColor = activityLabel.ForeColor = muted;
-            imageHint.ForeColor = muted;
+            gameLabel.ForeColor = activityLabel.ForeColor = muted;
+            regularTitle.ForeColor = endGameTitle.ForeColor = foreground;
+            regularDescription.ForeColor = endGameDescription.ForeColor = muted;
+            regularHint.ForeColor = endGameHint.ForeColor = muted;
+            regularCard.BackColor = endGameCard.BackColor = surface;
 
-            foreach (var box in new[] { gamePath, pngPath, log })
+            foreach (var box in new[] { gamePath, regularPngPath, endGamePngPath, log })
             {
                 box.BackColor = input;
                 box.ForeColor = foreground;
             }
 
             StyleButton(chooseGame, secondary, foreground);
-            StyleButton(choosePng, secondary, foreground);
-            StyleButton(revert, secondary, foreground);
-            StyleButton(apply, accent, Color.FromArgb(24, 24, 24));
+            StyleButton(chooseRegularPng, secondary, foreground);
+            StyleButton(chooseEndGamePng, secondary, foreground);
+            StyleButton(restoreRegular, secondary, foreground);
+            StyleButton(restoreEndGame, secondary, foreground);
+            StyleButton(applyRegular, accent, Color.FromArgb(24, 24, 24));
+            StyleButton(applyEndGame, accent, Color.FromArgb(24, 24, 24));
             ApplyDarkTitleBar();
             Invalidate(true);
         }
@@ -329,23 +401,20 @@ namespace JackdawFlagPatcher
 
     internal static class Patcher
     {
-        private const ulong TargetFileId = 0x218240C6D66UL;
         private const uint TextureMapType = 0x85C817C3U;
         private const int ExpectedWidth = 1024;
         private const int ExpectedHeight = 512;
         private const int ExpectedBc7Bytes = 524288;
-        private const string VanillaEntrySha256 = "91801CBF0E308C450F813C6D0B2A93ACA09C12DDD3B7792910906A8FFA2D0680";
-        private const string PrefixSha256 = "5CDC6E73C06AFC4FB33BAE5E01CB5770736A2AF2868692FE1CE073C6E3393940";
         private static readonly byte[] BmsMagic = { 0x33, 0xAA, 0xFB, 0x57, 0x99, 0xFA, 0x04, 0x10 };
         private static readonly byte[] CompressionInfo = { 0x08, 0x00, 0x00, 0x04, 0x80 };
 
-        // Texture metadata for the single Jackdaw pirate-flag resource. No game artwork is embedded.
+        // Texture metadata for the two Jackdaw flag resources. No game artwork is embedded.
 #if false
         private const string ResourcePrefixBase64 =
             "AwBmbQwkGAIAADECAAAAAAAAAABnPwwkGAIAAMEAAAAAAAAAAABgPwwkGAIAAEgBCAAAAAAAAADDF8iFBAIAACAAAABHeUMKGWZUiih5+xkCp7NK/vBoMYqWi7PP0HPy8P1Q4gBmbQwkGAIAAMMXyIUBASXSfe1UAgAABAAAAAFZ/wokGAIAAAEn8AcMBgIAAAHaDHVGGgIAAAFnPwwkGAIAAAMAAAAAAAAAAAAAAAAAAPj7AAAAAHRfuZIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIAAEAAAEBAAEAAAABAQAAAAAAAQAAAAAAAAAAAAEBAAAAAAAAAAAAAQAAAAMAAAAAAAAAAAEA+PsAAAAAoaizOwIA+PsAAAAA9kSKvmZtDCQYAgAAAQAAAAMA+PsAAAAAJ5Y+jgUehM0CAAAAAAAAAAEAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAFHoTNAAAAAAAADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAgD8BAAAAAAQA+PsAAAAAjlNBygAAAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAHAAAAxUDa4wAAAAAAAA0AAAAAANE6PbEAAAAAAAAKAAAAAAA1pTKyAAAAAAAACgAAAAAAleQiPgAAAAAAAAoAAAAAAFTMEowAAAAAAAAKAAAAAACyGlzpAAAAAAAACgAAAAAAabogpAAAAAAAAAoAAAAAAClcDz6e2Ak+ElUEPgAAgD8AAAAAAACAP9ejMD8AAAAAAACAPzMzcz9wZg7XjwAAACUAAABHeUMKGWZUitDR+hkCp7NKKHmL0Ines0r+8GgxipaLs5G1c6KTAGc/DCQYAgAAcGYO1wEBYD8MJBgCAAADAAAAAAAAAAADAAAAAAAAAAADAAAAAAAAAAADAAAAAAAAAAADAAAAAAAAAAADAAAAAAAAAAADAAAAAAAAAAADAAAAAAAAAAADAAAAAAAAAAADAAAAAAAAAAADAAAAAAAAAABXAAAAF+m3og8BCAAsAAAAR3lDChlmVIrQ0foZAqezSih5i9CJ3rNK/vBoMYqWi7Mu2nKiGdb7mwEPExEAYD8MJBgCAAAX6beiAQAEAAAAAgAAAQAAAAEAAAAKAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAVwAAAAAA+PsAAAAAELVShgMAAAAAAQD4+wAAAAAQtVKGAwAAAAACAPj7AAAAABC1UoYDAAAAAAMA+PsAAAAAELVShgMAAAAAAAQA+PsAAAAA6X8jEwFgPwwkGAIAAAMAAABnAgAAAAQAAAACAAABAAAAAQAAAAEAAAAKAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAQAAAAAAAAAIAAAAAAAACAAAAAABAAAAAgAAFAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAIAA==";
 
 #endif
-        private const string VerifiedResourcePrefixBase64 =
+        private const string RegularResourcePrefixBase64 =
             "AwBmbQwkGAIAADECAAAAAAAAAABnPwwkGAIAAMEAAAAAAAAAAABgPwwkGAIAAEgBCAAAAAAAAADDF8iFBAIAACAAAABHeUMKGWZU" +
             "iih5+xkCp7NK/vBoMYqWi7PP0HPy8P1Q4gBmbQwkGAIAAMMXyIUBASXSfe1UAgAABAAAAAFZ/wokGAIAAAEn8AcMBgIAAAHaDHVG" +
             "GgIAAAFnPwwkGAIAAAMAAAAAAAAAAAAAAAAAAPj7AAAAAHRfuZIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIAAEAAAEBAAEAAAAB" +
@@ -362,6 +431,23 @@ namespace JackdawFlagPatcher
             "UoYDAAAAAAMA+PsAAAAAELVShgMAAAAAAAQA+PsAAAAA6X8jEwFgPwwkGAIAAAMAAABnAgAAAAQAAAACAAABAAAAAQAAAAEAAAAK" +
             "AAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAQAAAAAAAAAIAAAAAAAACAAAAAABAAAAAgAAFAAAAAEAAAAAAAAAAAAA" +
             "AAAAAAAAAAgAAAAIAA==";
+
+        private const string EndGameResourcePrefixBase64 =
+            "AwD7XakaCgIAADsCAAAAAAAAAADQXKkaCgIAAMsAAAAAAAAAAADJXKkaCgIAAFIBCAAAAAAAAADDF8iFBAIAACoAAABHeUMKGWZUiih5+xkCp7NKPnob8hHHC9OPAfKBkpZTQ2F5w3mElLQ68VkA+12pGgoCAADDF8iFAQEl0n3tVAIAAAQAAAABWf8KJBgCAAABJ/AHDAYCAAAB2gx1RhoCAAAB0FypGgoCAAADAAAAAAAAAAAAAAAAAAD4+wAAAAB0X7mSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyAABAAABAQABAAAAAQEAAAAAAAEAAAAAAAAAAAABAQAAAAAAAAAAAAEAAAADAAAAAAAAAAABAPj7AAAAAKGoszsCAPj7AAAAAPZEir77XakaCgIAAAEAAAADAPj7AAAAACeWPo4FHoTNAgAAAAAAAAABAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAABAAAABR6EzQAAAAAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAAIA/AQAAAAAEAPj7AAAAAI5TQcoAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAAAAABwAAAMVA2uMAAAAAAAANAAAAAADROj2xAAAAAAAACgAAAAAANaUysgAAAAAAAAoAAAAAAJXkIj4AAAAAAAAKAAAAAABUzBKMAAAAAAAACgAAAAAAshpc6QAAAAAAAAoAAAAAAGm6IKQAAAAAAAAKAAAAAAApXA8+ntgJPhJVBD4AAIA/AAAAAAAAgD+kcH0/zcxMPgAAgD8zM3M/cGYO148AAAAvAAAAR3lDChlmVIrQ0foZAqezSih5i9CJ3rNKPnob8hHHC9OPAfKBkpZTQ4RkxHlZKhoA0FypGgoCAABwZg7XAQHJXKkaCgIAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAACMAAAAX6beiDwEIADYAAABHeUMKGWZUitDR+hkCp7NKKHmL0Ines0o+ehvyEccL048B8oGSllNDtkHCeYRkDJMi95SA6cMAyVypGgoCAAAX6beiAQAEAAAAAgAAAQAAAAEAAAAKAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAIwAAAAAA+PsAAAAAELVShgMAAAAAAQD4+wAAAAAQtVKGAwAAAAACAPj7AAAAABC1UoYDAAAAAAMA+PsAAAAAELVShgMAAAAAAAQA+PsAAAAA6X8jEwHJXKkaCgIAAAMAAABnAgAAAAQAAAACAAABAAAAAQAAAAEAAAAKAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAQAAAAAAAAAIAAAAAAAACAAAAAABAAAAAgAAFAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAIAA==";
+
+        private static readonly AssetDefinition RegularFlag = new AssetDefinition(
+            "regular", "Regular flag", 0x218240C6D66UL,
+            "91801CBF0E308C450F813C6D0B2A93ACA09C12DDD3B7792910906A8FFA2D0680",
+            RegularResourcePrefixBase64, 1138,
+            "5CDC6E73C06AFC4FB33BAE5E01CB5770736A2AF2868692FE1CE073C6E3393940",
+            1082, 525512);
+
+        private static readonly AssetDefinition EndGameFlag = new AssetDefinition(
+            "end-game", "End-game flag", 0x20A1AA95DFBUL,
+            "6B7030D5DB4CCFF6D93BCC5E02418C203DFED29BE4F479A310A5FE963C4DBEA9",
+            EndGameResourcePrefixBase64, 1168,
+            "C957B1558B93EAA9D5133FB5A5E93EAB0EC93251999643449A91F6F2A5C9BB61",
+            1112, 525542);
 
         public static string FindGameDirectory()
         {
@@ -538,41 +624,51 @@ namespace JackdawFlagPatcher
 
         public static string Apply(string selectedGameDirectory, string selectedPng)
         {
+            return Apply(selectedGameDirectory, selectedPng, "regular");
+        }
+
+        public static string Apply(string selectedGameDirectory, string selectedPng, string slot)
+        {
             EnsureGameClosed();
+            var asset = ResolveAsset(slot);
             var gameDirectory = NormalizeGameDirectory(selectedGameDirectory);
             var archivePath = Path.Combine(gameDirectory, "DataPC_boot.forge");
             ValidatePng(selectedPng);
 
-            var prefix = Convert.FromBase64String(VerifiedResourcePrefixBase64);
-            if (prefix.Length != 1138 || !Hash(prefix).Equals(PrefixSha256, StringComparison.OrdinalIgnoreCase))
+            var prefix = Convert.FromBase64String(asset.ResourcePrefixBase64);
+            if (prefix.Length != asset.PrefixLength ||
+                !Hash(prefix).Equals(asset.PrefixSha256, StringComparison.OrdinalIgnoreCase))
                 throw new InvalidDataException("The built-in resource definition failed its integrity check.");
 
-            var entry = LocateEntry(archivePath);
+            var entry = LocateEntry(archivePath, asset);
             var currentHash = HashRange(archivePath, entry.Offset, entry.Length);
-            var backupPath = BackupPathFor(archivePath);
+            var backupPath = BackupPathFor(archivePath, asset);
             var backup = File.Exists(backupPath) ? ReadBackup(backupPath) : null;
 
             if (backup == null)
             {
-                if (!currentHash.Equals(VanillaEntrySha256, StringComparison.OrdinalIgnoreCase))
+                if (!currentHash.Equals(asset.VanillaEntrySha256, StringComparison.OrdinalIgnoreCase))
                     throw new InvalidOperationException(
-                        "The Jackdaw flag is not in its original state. Restore it with the tool that last changed it, then run this patcher again.");
+                        "The " + asset.Label.ToLowerInvariant() +
+                        " is not in its original state. Restore it with the tool that last changed it, then run this patcher again.");
                 backup = new Backup(archivePath, entry.Offset, entry.Length, currentHash);
                 WriteBackup(backupPath, backup);
             }
             else
             {
                 backup.ValidateFor(archivePath);
-                if (!currentHash.Equals(VanillaEntrySha256, StringComparison.OrdinalIgnoreCase) &&
-                    !IsOurUncompressedEntry(archivePath, entry))
-                    throw new InvalidOperationException("The current flag entry was changed by another mod. Restore the original before continuing.");
+                if (!currentHash.Equals(asset.VanillaEntrySha256, StringComparison.OrdinalIgnoreCase) &&
+                    !IsOurUncompressedEntry(archivePath, entry, asset))
+                    throw new InvalidOperationException(
+                        "The current " + asset.Label.ToLowerInvariant() +
+                        " entry was changed by another mod. Restore the original before continuing.");
             }
 
             var bc7 = ConvertPngToBc7(selectedPng);
             var resource = new byte[prefix.Length + bc7.Length];
             Buffer.BlockCopy(prefix, 0, resource, 0, prefix.Length);
             Buffer.BlockCopy(bc7, 0, resource, prefix.Length, bc7.Length);
-            var packed = BuildUncompressedBms(resource);
+            var packed = BuildUncompressedBms(resource, asset);
 
             using (var stream = new FileStream(archivePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             using (var writer = new BinaryWriter(stream, Encoding.UTF8, true))
@@ -591,7 +687,7 @@ namespace JackdawFlagPatcher
                 {
                     stream.Position = entry.RowPosition;
                     writer.Write(newOffset);
-                    writer.Write(TargetFileId);
+                    writer.Write(asset.FileId);
                     writer.Write((uint)packed.Length);
                     writer.Write(entry.Type);
                     stream.Flush(true);
@@ -600,7 +696,7 @@ namespace JackdawFlagPatcher
                 {
                     stream.Position = entry.RowPosition;
                     writer.Write(entry.Offset);
-                    writer.Write(TargetFileId);
+                    writer.Write(asset.FileId);
                     writer.Write(entry.Length);
                     writer.Write(entry.Type);
                     stream.Flush(true);
@@ -608,17 +704,24 @@ namespace JackdawFlagPatcher
                 }
             }
 
-            return "Jackdaw flag applied. Your original index entry is backed up for restoration.";
+            return asset.Label + " applied. Its original index entry is backed up for restoration.";
         }
 
         public static string Restore(string selectedGameDirectory)
         {
+            return Restore(selectedGameDirectory, "regular");
+        }
+
+        public static string Restore(string selectedGameDirectory, string slot)
+        {
             EnsureGameClosed();
+            var asset = ResolveAsset(slot);
             var gameDirectory = NormalizeGameDirectory(selectedGameDirectory);
             var archivePath = Path.Combine(gameDirectory, "DataPC_boot.forge");
-            var backupPath = BackupPathFor(archivePath);
+            var backupPath = BackupPathFor(archivePath, asset);
             if (!File.Exists(backupPath))
-                throw new FileNotFoundException("No backup made by Jackdaw Flag Patcher was found.");
+                throw new FileNotFoundException(
+                    "No " + asset.Label.ToLowerInvariant() + " backup made by Jackdaw Flag Patcher was found.");
 
             var backup = ReadBackup(backupPath);
             backup.ValidateFor(archivePath);
@@ -626,19 +729,30 @@ namespace JackdawFlagPatcher
             if (!originalHash.Equals(backup.Sha256, StringComparison.OrdinalIgnoreCase))
                 throw new InvalidDataException("The backed-up original data no longer matches this archive. Nothing was changed.");
 
-            var entry = LocateEntry(archivePath);
+            var entry = LocateEntry(archivePath, asset);
             using (var stream = new FileStream(archivePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             using (var writer = new BinaryWriter(stream, Encoding.UTF8, true))
             {
                 stream.Position = entry.RowPosition;
                 writer.Write(backup.Offset);
-                writer.Write(TargetFileId);
+                writer.Write(asset.FileId);
                 writer.Write(backup.Length);
                 writer.Write(entry.Type);
                 stream.Flush(true);
             }
             File.Delete(backupPath);
-            return "Original Jackdaw flag restored. Appended mod data was left harmlessly unreferenced.";
+            return "Original " + asset.Label.ToLowerInvariant() +
+                   " restored. Appended mod data was left harmlessly unreferenced.";
+        }
+
+        private static AssetDefinition ResolveAsset(string slot)
+        {
+            if (string.Equals(slot, "regular", StringComparison.OrdinalIgnoreCase))
+                return RegularFlag;
+            if (string.Equals(slot, "end-game", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(slot, "endgame", StringComparison.OrdinalIgnoreCase))
+                return EndGameFlag;
+            throw new ArgumentException("Choose either the regular flag or the end-game flag.", "slot");
         }
 
         private static string NormalizeGameDirectory(string selected)
@@ -735,7 +849,7 @@ namespace JackdawFlagPatcher
             return pixels;
         }
 
-        private static Entry LocateEntry(string archivePath)
+        private static Entry LocateEntry(string archivePath, AssetDefinition asset)
         {
             using (var stream = new FileStream(archivePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new BinaryReader(stream))
@@ -760,18 +874,21 @@ namespace JackdawFlagPatcher
                     var fileId = reader.ReadUInt64();
                     var length = reader.ReadUInt32();
                     var type = reader.ReadUInt32();
-                    if (fileId == TargetFileId && type == TextureMapType)
+                    if (fileId == asset.FileId && type == TextureMapType)
                     {
                         if (offset > (ulong)stream.Length || length > stream.Length - (long)offset)
-                            throw new InvalidDataException("The Jackdaw flag entry points outside the archive.");
+                            throw new InvalidDataException(
+                                "The " + asset.Label.ToLowerInvariant() + " entry points outside the archive.");
                         return new Entry(rowPosition, offset, length, type);
                     }
                 }
             }
-            throw new InvalidDataException("The Jackdaw pirate-flag resource was not found. This game build may be unsupported.");
+            throw new InvalidDataException(
+                "The " + asset.Label.ToLowerInvariant() +
+                " resource was not found. This game build may be unsupported.");
         }
 
-        private static byte[] BuildUncompressedBms(byte[] resource)
+        private static byte[] BuildUncompressedBms(byte[] resource, AssetDefinition asset)
         {
             using (var output = new MemoryStream())
             using (var writer = new BinaryWriter(output))
@@ -781,7 +898,7 @@ namespace JackdawFlagPatcher
                 {
                     Slice(resource, 56, 262144),
                     Slice(resource, 262200, 262144),
-                    Slice(resource, 524344, 1082)
+                    Slice(resource, 524344, asset.FinalChunkLength)
                 });
                 return output.ToArray();
             }
@@ -825,9 +942,10 @@ namespace JackdawFlagPatcher
             return result;
         }
 
-        private static bool IsOurUncompressedEntry(string archivePath, Entry entry)
+        private static bool IsOurUncompressedEntry(
+            string archivePath, Entry entry, AssetDefinition asset)
         {
-            if (entry.Length != 525512)
+            if (entry.Length != asset.PackedLength)
                 return false;
             try
             {
@@ -845,7 +963,7 @@ namespace JackdawFlagPatcher
                     if (!reader.ReadBytes(8).SequenceEqual(BmsMagic) || reader.ReadUInt16() != 3 ||
                         !reader.ReadBytes(5).SequenceEqual(CompressionInfo) || reader.ReadUInt32() != 3)
                         return false;
-                    var sizes = new[] { 262144, 262144, 1082 };
+                    var sizes = new[] { 262144, 262144, asset.FinalChunkLength };
                     for (var i = 0; i < sizes.Length; i++)
                         if (reader.ReadUInt32() != sizes[i] || reader.ReadUInt32() != sizes[i])
                             return false;
@@ -856,13 +974,14 @@ namespace JackdawFlagPatcher
                         foreach (var size in sizes)
                         {
                             reader.ReadUInt32();
-                            var take = Math.Min(size, 1138 - (int)prefix.Length);
+                            var take = Math.Min(size, asset.PrefixLength - (int)prefix.Length);
                             if (take > 0)
                                 prefix.Write(reader.ReadBytes(take), 0, take);
                             stream.Position += size - take;
                         }
-                        return prefix.Length == 1138 &&
-                               Hash(prefix.ToArray()).Equals(PrefixSha256, StringComparison.OrdinalIgnoreCase);
+                        return prefix.Length == asset.PrefixLength &&
+                               Hash(prefix.ToArray()).Equals(
+                                   asset.PrefixSha256, StringComparison.OrdinalIgnoreCase);
                     }
                 }
             }
@@ -881,12 +1000,17 @@ namespace JackdawFlagPatcher
                 throw new InvalidOperationException("Close Assassin's Creed IV Black Flag before patching.");
         }
 
-        private static string BackupPathFor(string archivePath)
+        private static string BackupPathFor(string archivePath, AssetDefinition asset)
         {
             var directory = Environment.GetEnvironmentVariable("JFP_BACKUP_DIR");
             if (string.IsNullOrWhiteSpace(directory))
                 directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Jackdaw Flag Patcher Backup");
-            var name = Hash(Encoding.UTF8.GetBytes(Path.GetFullPath(archivePath).ToUpperInvariant())).Substring(0, 16) + ".jfpbackup";
+            var archiveKey = Hash(Encoding.UTF8.GetBytes(
+                Path.GetFullPath(archivePath).ToUpperInvariant())).Substring(0, 16);
+            // Keep the v1.0 regular-flag backup filename for seamless upgrades.
+            var name = ReferenceEquals(asset, RegularFlag)
+                ? archiveKey + ".jfpbackup"
+                : archiveKey + "-" + asset.FileId.ToString("X") + ".jfpbackup";
             return Path.Combine(directory, name);
         }
 
@@ -958,6 +1082,35 @@ namespace JackdawFlagPatcher
             finally
             {
                 stream.Position = originalPosition;
+            }
+        }
+
+        private sealed class AssetDefinition
+        {
+            public readonly string Slot;
+            public readonly string Label;
+            public readonly ulong FileId;
+            public readonly string VanillaEntrySha256;
+            public readonly string ResourcePrefixBase64;
+            public readonly int PrefixLength;
+            public readonly string PrefixSha256;
+            public readonly int FinalChunkLength;
+            public readonly uint PackedLength;
+
+            public AssetDefinition(
+                string slot, string label, ulong fileId, string vanillaEntrySha256,
+                string resourcePrefixBase64, int prefixLength, string prefixSha256,
+                int finalChunkLength, uint packedLength)
+            {
+                Slot = slot;
+                Label = label;
+                FileId = fileId;
+                VanillaEntrySha256 = vanillaEntrySha256;
+                ResourcePrefixBase64 = resourcePrefixBase64;
+                PrefixLength = prefixLength;
+                PrefixSha256 = prefixSha256;
+                FinalChunkLength = finalChunkLength;
+                PackedLength = packedLength;
             }
         }
 

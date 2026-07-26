@@ -5,7 +5,8 @@ Thanks for helping improve Jackdaw Flag Patcher.
 ## Before opening an issue
 
 - Confirm the game is closed.
-- Restore other Jackdaw flag mods before the first patch attempt.
+- Restore other mods affecting the selected Jackdaw flag before its first patch
+  attempt.
 - Record whether you use Black Flag Resynced or the legacy Windows release.
 - Include the complete error message, but do not upload Ubisoft game archives.
 
@@ -21,5 +22,6 @@ notice. Do not add Ubisoft artwork or archive data to the repository.
 
 ## Pull requests
 
-Keep changes focused and test apply, repeat apply, and restore against a disposable
-forge fixture. Never run write tests against a user's only game archive.
+Keep changes focused and test apply, repeat apply, independent restore, and
+cross-resource isolation against a disposable forge fixture. Never run write
+tests against a user's only game archive.

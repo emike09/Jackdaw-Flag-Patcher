@@ -2,8 +2,8 @@
 
 ## Main file
 
-- Upload `JackdawFlagPatcher-v1.0.0.zip` as the main file.
-- Version: `1.0.0`
+- Upload `JackdawFlagPatcher-v1.1.0.zip` as the main file.
+- Version: `1.1.0`
 - Suggested category: Utilities
 - No external dependency is required.
 - Do not mark Sails Workshop as a requirement.
@@ -13,7 +13,8 @@
 - Paste `NEXUS-DESCRIPTION.md` into the mod description.
 - Emphasize the 1024 × 512 RGBA requirement.
 - Keep the 8–16 transparent-pixel safe-area warning visible.
-- State that other Jackdaw flag mods must be restored before first use.
+- State that other mods affecting the selected Jackdaw flag must be restored
+  before first use.
 - State that the game must be closed while applying or restoring.
 
 ## Source
@@ -24,7 +25,7 @@ Create the public repository as:
 
 Upload the contents of the GitHub source bundle, not the outer folder itself.
 Confirm that the README, MIT license, third-party notices, contribution guide,
-security policy, and v1.0 release tag are visible.
+security policy, and v1.1.0 release tag are visible.
 
 ## Nexus permissions
 
