@@ -1,0 +1,13 @@
+Jackdaw Flag Patcher includes:
+
+Microsoft DirectXTex - texconv.exe
+https://github.com/microsoft/DirectXTex
+Release: may2026 (texconv.exe file version 2026.5.8.1)
+License: MIT
+
+The complete DirectXTex license is included as DIRECTXTEX-LICENSE.txt.
+The bundled texconv.exe SHA-256 is:
+DCFDEC10244E02CF5037FBA089C55FB7E1326B1C8181742D77D15FA5CB5EEF06
+
+No Sails Workshop code, binaries, configuration, or artwork are included.
+No Ubisoft game artwork is included.
