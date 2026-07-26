@@ -47,9 +47,8 @@ in the archive and a small restoration record is kept in Documents under
 - Verify game files through your game launcher if the installed game build is not
   recognized or if the archive has been altered unexpectedly.
 
-This is a clean-room, single-resource tool. It does not contain or require Sails
-Workshop, and it does not bundle Ubisoft artwork. Microsoft DirectXTex `texconv`
-is included under the MIT License; see the included notices.
+This is a clean-room, single-resource tool. It does not bundle Ubisoft artwork. 
+Microsoft DirectXTex `texconv` is included under the MIT License.
 
 ## Source code
 
@@ -59,15 +58,6 @@ Source, releases, and issue tracking:
 To build locally on Windows, run `build.ps1`. It uses the installed .NET Framework
 C# compiler and the included MIT-licensed DirectXTex binary. The program itself is
 released under the MIT License.
-
-## Nexus Mods dependency setting
-
-Do **not** mark Sails Workshop as a required dependency for this standalone
-version. It is technically and legally independent. A courteous credit can say:
-
-> Inspired by the user-friendly texture workflow demonstrated by Sails Workshop.
-> This patcher is an independent implementation and includes no Sails Workshop
-> code or files.
 
 Assassin's Creed and related names are trademarks of Ubisoft. This fan-made tool
 is not affiliated with or endorsed by Ubisoft.
