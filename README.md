@@ -28,13 +28,12 @@ does not change the other.
 - Keep all visible artwork at least 8–16 transparent pixels away from every edge.
   Artwork touching the image boundaries may be clipped in game.
 - Preserve the original extracted flag's alpha silhouette for natural torn edges
-- Artwork is inverted. You must submit an upside-down image. 
 
-The tool modifies `DataPC_boot.forge`. It appends new texture data and changes only
-the selected TextureMap index row:
+The tool appends new texture data and changes only the selected TextureMap index
+row:
 
-- Regular flag: `0x218240C6D66`
-- End-game flag: `0x20A1AA95DFB`
+- Regular flag: `0x218240C6D66` in `DataPC_boot.forge`
+- End-game flag: `0x20A1AA95DFB` in `DataPC_boot_patch_01.forge`
 
 The original bytes remain in the archive. Independent restoration records are
 kept in Documents under `Jackdaw Flag Patcher Backup`.
@@ -42,6 +41,8 @@ kept in Documents under `Jackdaw Flag Patcher Backup`.
 ## Compatibility and safety
 
 - Intended for the standard Windows PC release of Assassin's Creed IV: Black Flag.
+- End-game flag replacement requires the Resynced patch forge. Regular-flag
+  replacement remains compatible with the recognized legacy PC installation.
 - Detects Steam/Resynced and Ubisoft installs from Windows registry records, then
   follows Steam library metadata when needed. Manual folder selection remains
   available.
@@ -50,6 +51,9 @@ kept in Documents under `Jackdaw Flag Patcher Backup`.
 - The game must be closed.
 - Repeated applications are supported; only the first original backup for each
   flag is retained.
+- Version 1.1.1 automatically restores the inactive base-archive copy mistakenly
+  redirected by version 1.1.0 before applying or restoring the active end-game
+  resource.
 - Restoring does not shrink the forge archive; appended bytes remain unreferenced.
 - Verify game files through your game launcher if the installed game build is not
   recognized or if the archive has been altered unexpectedly.

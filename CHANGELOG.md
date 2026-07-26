@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.1 - 2026-07-25
+
+- Corrected the end-game flag target to the active resource copy in
+  `DataPC_boot_patch_01.forge`.
+- Added automatic restoration of the inactive `DataPC_boot.forge` copy changed by
+  version 1.1.0.
+- Added archive-priority fixture coverage for base and patch forge copies sharing
+  the same resource ID.
+
 ## 1.1.0 - 2026-07-25
 
 - Added independent replacement support for the regular and end-game flags.

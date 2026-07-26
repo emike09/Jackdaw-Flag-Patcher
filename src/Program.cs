@@ -16,8 +16,8 @@ using Microsoft.Win32;
 [assembly: AssemblyProduct("Jackdaw Flag Patcher")]
 [assembly: AssemblyDescription("Standalone Jackdaw regular and end-game flag texture patcher")]
 [assembly: AssemblyCopyright("Copyright © 2026 Fishes")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.1.0")]
+[assembly: AssemblyFileVersion("1.1.1.0")]
 
 namespace JackdawFlagPatcher
 {
@@ -63,7 +63,7 @@ namespace JackdawFlagPatcher
 
         public MainForm()
         {
-            Text = "Jackdaw Flag Patcher  ·  v1.1";
+            Text = "Jackdaw Flag Patcher  ·  v1.1.1";
             Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             ClientSize = new Size(880, 680);
             MinimumSize = new Size(780, 650);
@@ -433,20 +433,20 @@ namespace JackdawFlagPatcher
             "AAAAAAAAAAgAAAAIAA==";
 
         private const string EndGameResourcePrefixBase64 =
-            "AwD7XakaCgIAADsCAAAAAAAAAADQXKkaCgIAAMsAAAAAAAAAAADJXKkaCgIAAFIBCAAAAAAAAADDF8iFBAIAACoAAABHeUMKGWZUiih5+xkCp7NKPnob8hHHC9OPAfKBkpZTQ2F5w3mElLQ68VkA+12pGgoCAADDF8iFAQEl0n3tVAIAAAQAAAABWf8KJBgCAAABJ/AHDAYCAAAB2gx1RhoCAAAB0FypGgoCAAADAAAAAAAAAAAAAAAAAAD4+wAAAAB0X7mSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyAABAAABAQABAAAAAQEAAAAAAAEAAAAAAAAAAAABAQAAAAAAAAAAAAEAAAADAAAAAAAAAAABAPj7AAAAAKGoszsCAPj7AAAAAPZEir77XakaCgIAAAEAAAADAPj7AAAAACeWPo4FHoTNAgAAAAAAAAABAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAABAAAABR6EzQAAAAAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAAIA/AQAAAAAEAPj7AAAAAI5TQcoAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAAAAABwAAAMVA2uMAAAAAAAANAAAAAADROj2xAAAAAAAACgAAAAAANaUysgAAAAAAAAoAAAAAAJXkIj4AAAAAAAAKAAAAAABUzBKMAAAAAAAACgAAAAAAshpc6QAAAAAAAAoAAAAAAGm6IKQAAAAAAAAKAAAAAAApXA8+ntgJPhJVBD4AAIA/AAAAAAAAgD+kcH0/zcxMPgAAgD8zM3M/cGYO148AAAAvAAAAR3lDChlmVIrQ0foZAqezSih5i9CJ3rNKPnob8hHHC9OPAfKBkpZTQ4RkxHlZKhoA0FypGgoCAABwZg7XAQHJXKkaCgIAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAACMAAAAX6beiDwEIADYAAABHeUMKGWZUitDR+hkCp7NKKHmL0Ines0o+ehvyEccL048B8oGSllNDtkHCeYRkDJMi95SA6cMAyVypGgoCAAAX6beiAQAEAAAAAgAAAQAAAAEAAAAKAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAIwAAAAAA+PsAAAAAELVShgMAAAAAAQD4+wAAAAAQtVKGAwAAAAACAPj7AAAAABC1UoYDAAAAAAMA+PsAAAAAELVShgMAAAAAAAQA+PsAAAAA6X8jEwHJXKkaCgIAAAMAAABnAgAAAAQAAAACAAABAAAAAQAAAAEAAAAKAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAQAAAAAAAAAIAAAAAAAACAAAAAABAAAAAgAAFAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAIAA==";
+            "AwD7XakaCgIAADsCAAAAAAAAAADQXKkaCgIAAMsAAAAAAAAAAADJXKkaCgIAAFIBCAAAAAAAAADDF8iFBAIAACoAAABHeUMKGWZUiih5+xkCp7NKPnob8hHHC9OPAfKBkpZTQ2F5w3mElLQ68VkA+12pGgoCAADDF8iFAQEl0n3tVAIAAAQAAAABWf8KJBgCAAABJ/AHDAYCAAAB2gx1RhoCAAAB0FypGgoCAAADAAAAAAAAAAAAAAAAAAD4+wAAAAB0X7mSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyAABAAABAQABAAAAAQEAAQAAAAEAAAAAAAAAAAABAQAAAAAAAAAAAAEAAAADAAAAAAAAAAABAPj7AAAAAKGoszsCAPj7AAAAAPZEir77XakaCgIAAAEAAAADAPj7AAAAACeWPo4FHoTNAgAAAAAAAAABAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAABAAAABR6EzQAAAAAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAAIA/AQAAAAAEAPj7AAAAAI5TQcoAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAAAAABwAAAMVA2uMAAAAAAAANAAAAAADROj2xAAAAAAAACgAAAAAANaUysgAAAAAAAAoAAAAAAJXkIj4AAAAAAAAKAAAAAABUzBKMAAAAAAAACgAAAAAAshpc6QAAAAAAAAoAAAAAAGm6IKQAAAAAAAAKAAAAAAApXA8+ntgJPhJVBD4AAIA/AAAAAAAAgD+kcH0/zcxMPgAAgD8zM3M/cGYO148AAAAvAAAAR3lDChlmVIrQ0foZAqezSih5i9CJ3rNKPnob8hHHC9OPAfKBkpZTQ4RkxHlZKhoA0FypGgoCAABwZg7XAQHJXKkaCgIAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAAAMAAAAAAAAAACMAAAAX6beiDwEIADYAAABHeUMKGWZUitDR+hkCp7NKKHmL0Ines0o+ehvyEccL048B8oGSllNDtkHCeYRkDJMi95SA6cMAyVypGgoCAAAX6beiAQAEAAAAAgAAAQAAAAEAAAAKAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAIwAAAAAA+PsAAAAAELVShgMAAAAAAQD4+wAAAAAQtVKGAwAAAAACAPj7AAAAABC1UoYDAAAAAAMA+PsAAAAAELVShgMAAAAAAAQA+PsAAAAA6X8jEwHJXKkaCgIAAAMAAABnAgAAAAQAAAACAAABAAAAAQAAAAEAAAAKAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAQAAAAAAAAAIAAAAAAAACAAAAAABAAAAAgAAFAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAIAA==";
 
         private static readonly AssetDefinition RegularFlag = new AssetDefinition(
-            "regular", "Regular flag", 0x218240C6D66UL,
+            "regular", "Regular flag", "DataPC_boot.forge", 0x218240C6D66UL,
             "91801CBF0E308C450F813C6D0B2A93ACA09C12DDD3B7792910906A8FFA2D0680",
             RegularResourcePrefixBase64, 1138,
             "5CDC6E73C06AFC4FB33BAE5E01CB5770736A2AF2868692FE1CE073C6E3393940",
             1082, 525512);
 
         private static readonly AssetDefinition EndGameFlag = new AssetDefinition(
-            "end-game", "End-game flag", 0x20A1AA95DFBUL,
-            "6B7030D5DB4CCFF6D93BCC5E02418C203DFED29BE4F479A310A5FE963C4DBEA9",
+            "end-game", "End-game flag", "DataPC_boot_patch_01.forge", 0x20A1AA95DFBUL,
+            "79A4768AF483DB7CAB7850573D5A6A62DD75CA7A68C7CA0512F9327069CAA061",
             EndGameResourcePrefixBase64, 1168,
-            "C957B1558B93EAA9D5133FB5A5E93EAB0EC93251999643449A91F6F2A5C9BB61",
+            "9C9C03BB189FF9F7CB21E450DEED635A7251FB596F83B40CD0883AF60E19A468",
             1112, 525542);
 
         public static string FindGameDirectory()
@@ -632,7 +632,12 @@ namespace JackdawFlagPatcher
             EnsureGameClosed();
             var asset = ResolveAsset(slot);
             var gameDirectory = NormalizeGameDirectory(selectedGameDirectory);
-            var archivePath = Path.Combine(gameDirectory, "DataPC_boot.forge");
+            var recoveredV110 = CleanupV110InactiveRedirect(gameDirectory, asset);
+            var archivePath = Path.Combine(gameDirectory, asset.ArchiveFileName);
+            if (!File.Exists(archivePath))
+                throw new FileNotFoundException(
+                    asset.Label + " support requires " + asset.ArchiveFileName +
+                    ". Confirm that this is a supported Black Flag Resynced installation.");
             ValidatePng(selectedPng);
 
             var prefix = Convert.FromBase64String(asset.ResourcePrefixBase64);
@@ -704,7 +709,10 @@ namespace JackdawFlagPatcher
                 }
             }
 
-            return asset.Label + " applied. Its original index entry is backed up for restoration.";
+            return asset.Label + " applied. Its original index entry is backed up for restoration." +
+                   (recoveredV110
+                       ? " The inactive copy changed by v1.1.0 was also restored."
+                       : "");
         }
 
         public static string Restore(string selectedGameDirectory)
@@ -717,11 +725,21 @@ namespace JackdawFlagPatcher
             EnsureGameClosed();
             var asset = ResolveAsset(slot);
             var gameDirectory = NormalizeGameDirectory(selectedGameDirectory);
-            var archivePath = Path.Combine(gameDirectory, "DataPC_boot.forge");
+            var recoveredV110 = CleanupV110InactiveRedirect(gameDirectory, asset);
+            var archivePath = Path.Combine(gameDirectory, asset.ArchiveFileName);
+            if (!File.Exists(archivePath))
+                throw new FileNotFoundException(
+                    asset.Label + " support requires " + asset.ArchiveFileName +
+                    ". Confirm that this is a supported Black Flag Resynced installation.");
             var backupPath = BackupPathFor(archivePath, asset);
             if (!File.Exists(backupPath))
+            {
+                if (recoveredV110)
+                    return "The inactive end-game flag copy changed by v1.1.0 was restored. " +
+                           "No active end-game replacement made by this version was found.";
                 throw new FileNotFoundException(
                     "No " + asset.Label.ToLowerInvariant() + " backup made by Jackdaw Flag Patcher was found.");
+            }
 
             var backup = ReadBackup(backupPath);
             backup.ValidateFor(archivePath);
@@ -742,7 +760,10 @@ namespace JackdawFlagPatcher
             }
             File.Delete(backupPath);
             return "Original " + asset.Label.ToLowerInvariant() +
-                   " restored. Appended mod data was left harmlessly unreferenced.";
+                   " restored. Appended mod data was left harmlessly unreferenced." +
+                   (recoveredV110
+                       ? " The inactive copy changed by v1.1.0 was also restored."
+                       : "");
         }
 
         private static AssetDefinition ResolveAsset(string slot)
@@ -753,6 +774,40 @@ namespace JackdawFlagPatcher
                 string.Equals(slot, "endgame", StringComparison.OrdinalIgnoreCase))
                 return EndGameFlag;
             throw new ArgumentException("Choose either the regular flag or the end-game flag.", "slot");
+        }
+
+        private static bool CleanupV110InactiveRedirect(
+            string gameDirectory, AssetDefinition asset)
+        {
+            if (!ReferenceEquals(asset, EndGameFlag))
+                return false;
+
+            var inactiveArchive = Path.Combine(gameDirectory, "DataPC_boot.forge");
+            var legacyBackupPath = BackupPathFor(inactiveArchive, asset);
+            if (!File.Exists(legacyBackupPath))
+                return false;
+
+            var backup = ReadBackup(legacyBackupPath);
+            backup.ValidateFor(inactiveArchive);
+            var originalHash = HashRange(inactiveArchive, backup.Offset, backup.Length);
+            if (!originalHash.Equals(backup.Sha256, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException(
+                    "The v1.1.0 recovery data no longer matches DataPC_boot.forge. Nothing was changed.");
+
+            var entry = LocateEntry(inactiveArchive, asset);
+            using (var stream = new FileStream(
+                inactiveArchive, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            using (var writer = new BinaryWriter(stream, Encoding.UTF8, true))
+            {
+                stream.Position = entry.RowPosition;
+                writer.Write(backup.Offset);
+                writer.Write(asset.FileId);
+                writer.Write(backup.Length);
+                writer.Write(entry.Type);
+                stream.Flush(true);
+            }
+            File.Delete(legacyBackupPath);
+            return true;
         }
 
         private static string NormalizeGameDirectory(string selected)
@@ -1089,6 +1144,7 @@ namespace JackdawFlagPatcher
         {
             public readonly string Slot;
             public readonly string Label;
+            public readonly string ArchiveFileName;
             public readonly ulong FileId;
             public readonly string VanillaEntrySha256;
             public readonly string ResourcePrefixBase64;
@@ -1098,12 +1154,14 @@ namespace JackdawFlagPatcher
             public readonly uint PackedLength;
 
             public AssetDefinition(
-                string slot, string label, ulong fileId, string vanillaEntrySha256,
-                string resourcePrefixBase64, int prefixLength, string prefixSha256,
-                int finalChunkLength, uint packedLength)
+                string slot, string label, string archiveFileName, ulong fileId,
+                string vanillaEntrySha256, string resourcePrefixBase64,
+                int prefixLength, string prefixSha256, int finalChunkLength,
+                uint packedLength)
             {
                 Slot = slot;
                 Label = label;
+                ArchiveFileName = archiveFileName;
                 FileId = fileId;
                 VanillaEntrySha256 = vanillaEntrySha256;
                 ResourcePrefixBase64 = resourcePrefixBase64;
