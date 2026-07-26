@@ -28,6 +28,7 @@ does not change the other.
 - Keep all visible artwork at least 8–16 transparent pixels away from every edge.
   Artwork touching the image boundaries may be clipped in game.
 - Preserve the original extracted flag's alpha silhouette for natural torn edges
+- Artwork is inverted. You must submit an upside-down image. 
 
 The tool modifies `DataPC_boot.forge`. It appends new texture data and changes only
 the selected TextureMap index row:
